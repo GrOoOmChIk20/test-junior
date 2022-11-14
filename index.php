@@ -1,9 +1,20 @@
 <?php
 
+$configApp = include_once './app/config.php';
+
+session_start();
+
+include_once './models//model.php';
+
+$model = new Model($configApp['components']);
+
 $titlePage = 'Home';
 
 include_once  './template/header.php';
 
+$arrTypes = $model->fetchType();
+
+// var_dump($arrTypes);die;
 ?>
 
 <div class="col-md-6 mx-auto">
@@ -15,9 +26,20 @@ include_once  './template/header.php';
         <div class="form-group">
             <select class="custom-select" id="inputGroupSelect04" aria-label="Example select with button addon" name="Equipment[type]">
                 <option selected>Type of equipment</option>
-                <option value="1">One</option>
-                <option value="2">Two</option>
-                <option value="3">Three</option>
+                
+                <?php
+                
+                    for ($i = 0; $i < count($arrTypes); $i++){
+
+                        $idType = $arrTypes[$i]['id'];
+                        $nameType = $arrTypes[$i]['type'];   
+
+                        echo "<option value='$idType'>$nameType</option>";
+                        
+                    }
+                    
+                ?>
+
             </select>
         </div>
         <div class="form-group">
