@@ -20,7 +20,11 @@ class Model
 
     public function insert()
     {
+<<<<<<< HEAD
 
+=======
+        
+>>>>>>> 5f8f1333f13894e509294632c991c6971fc1cd53
     }
 
 
@@ -36,9 +40,21 @@ class Model
                 while ($row = mysqli_fetch_assoc($sql)) {
                     $data[] = $row;
                 }
+<<<<<<< HEAD
             }
 
             return $data;
         }
     }
+=======
+
+            } 
+            
+            return $data;
+            
+        }
+
+    }
+
+>>>>>>> 5f8f1333f13894e509294632c991c6971fc1cd53
 }
