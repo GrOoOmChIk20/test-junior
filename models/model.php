@@ -20,58 +20,7 @@ class Model
 
     public function insert()
     {
-        $userData = $_POST['User'];
-
-        if (isset($userData['insert'])) {
-
-            $formValidation = $this->validation($userData);
-
-            switch ($formValidation['valid']) {
-
-                case true:
-
-                    $userData = $formValidation['validFields'];
-
-                    $fetchUser = $this->fetch(['id'], ['login' => $userData['login']]);
-
-                    if (empty($fetchUser)) {
-
-                        $userData['birthday'] = strtotime($userData['birthday']);
-                        $userData['pass'] = password_hash($userData['pass'], PASSWORD_DEFAULT);
-
-                        $query = "INSERT INTO `users` (`login`, `password`, `name`, `surname`, `gender`, `birthday`) VALUES ('{$userData['login']}', '{$userData['pass']}', '{$userData['name']}', '{$userData['surname']}', '{$userData['gender']}', '{$userData['birthday']}')";
-
-                        if ($sql = $this->connect->query($query)) {
-                            $_SESSION['succesField'] = 'User successfully added';
-
-                            header("Location: " . $_SERVER["REQUEST_URI"]);
-                            die;
-                        } else {
-                            $_SESSION['errorField'] = 'The entry has not been added, try again';
-
-                            header("Location: " . $_SERVER["REQUEST_URI"]);
-                            die;
-                        }
-                    } else {
-
-                        $_SESSION['errorField'] = 'A user with this login exists';
-
-                        header("Location: " . $_SERVER["REQUEST_URI"]);
-                        die;
-                    }
-
-                    break;
-
-                case false:
-
-                    $_SESSION['errorField'] = 'Please fill in all the fields';
-
-                    header("Location: " . $_SERVER["REQUEST_URI"]);
-                    die;
-
-                    break;
-            }
-        }
+        
     }
 
 
