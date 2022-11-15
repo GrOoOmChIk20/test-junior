@@ -8,7 +8,7 @@
 
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous">
-    
+
     <link rel="stylesheet" href="./template/css/style.css">
 
     <title><?= $configApp['name'] . ': ' . $titlePage ?></title>
@@ -30,3 +30,30 @@
                 </ul>
             </div>
         </nav>
+        <?php if (isset($_SESSION['errorField'])) {  ?>
+
+            <?php for ($error = 0; $error < count($_SESSION['errorField']); $error++) { ?>
+
+                <div class="alert alert-danger" role="alert">
+                    <?= $_SESSION['errorField'][$error]; ?>
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+
+            <?php }
+        } ?>
+
+
+        <?php if (isset($_SESSION['succesField'])) {  ?>
+            <?php for ($succes = 0; $succes < count($_SESSION['succesField']); $succes++) { ?>
+
+                <div class="alert alert-success" role="alert">
+                    <?= $_SESSION['succesField'][$succes]; ?>
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+
+        <?php  }
+        } ?>

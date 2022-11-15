@@ -30,19 +30,46 @@ class Model
 
                 $equipmentData = $formValidation['validFields'];
                 
-                $fetchMask = $this->fetchMask($equipmentData['type']);
+                $fetchMask = $this->fetchMask($equipmentData['type'])[0];
 
                 if ($fetchMask) {
 
                     $serialsNumber = explode(PHP_EOL, $equipmentData['serials_number']);
-                    $splitMask = str_split($fetchMask);
+                    $mask = $fetchMask['mask_numb'];
+                    $splitMask = str_split($mask);
 
                     $regularMatch = $this->generatedMatch($splitMask);
-                    // var_dump($serialsNumber);die;
+                    
+                    for ($number = 0; $number < count($serialsNumber); $number++) {
+
+                        $serialNumber = $serialsNumber[$number];
+                        $match = preg_match($regularMatch, $serialNumber);
+
+                        if ($match) {
+
+                            $fetchSerialNumber = $this->fetchSerialNumber($serialNumber);
+                            
+                            if ($fetchSerialNumber) {
+
+                                $_SESSION['errorField'][] = $serialNumber . ' has already been added to the database';
+                                
+                            } else {
+
+                                $idEquipment = $fetchMask['id'];
+                                $this->insertSerialNumber($serialNumber, $idEquipment);
+
+                            }
+                        } else {
+                            $_SESSION['errorField'][] = $serialNumber . ' does not match the mask';
+                        }
+                    }
+
+                    header("Location: " . $_SERVER["REQUEST_URI"]);
+                    die;
 
                 } else {
 
-                    $_SESSION['errorField'] = 'Type equipment nor found';
+                    $_SESSION['errorField'][] = 'Type equipment nor found';
 
                     header("Location: " . $_SERVER["REQUEST_URI"]);
                     die;
@@ -51,7 +78,7 @@ class Model
 
             }else {
 
-                $_SESSION['errorField'] = 'Please fill in all the fields';
+                $_SESSION['errorField'][] = 'Please fill in all the fields';
 
                 header("Location: " . $_SERVER["REQUEST_URI"]);
                 die;
@@ -61,6 +88,22 @@ class Model
         }
     }
 
+
+    private function insertSerialNumber($serialNumber, $idEquipment)
+    {
+        $query = "INSERT INTO `equipment` (`id_equipment`, `serial_number`) VALUES ('{$idEquipment}', '{$serialNumber}')";
+
+        if ($sql = $this->connect->query($query)) {
+
+            $_SESSION['succesField'][] = $serialNumber . ' added to the database';
+
+        } else {
+
+            $_SESSION['errorField'][] = 'The entry has not been added, try again';
+
+        }
+
+    }
 
     public function fetchType()
     {
@@ -83,8 +126,27 @@ class Model
     public function fetchMask($id)
     {
         $data = [];
-        $query = "SELECT mask_numb FROM type_equipment WHERE id = $id";
+        $query = "SELECT id, mask_numb FROM type_equipment WHERE id = '$id'";
 
+        if ($sql = $this->connect->query($query)) {
+
+            if (mysqli_num_rows($sql) != 0) {
+
+                while ($row = mysqli_fetch_assoc($sql)) {
+                    $data[] = $row;
+                }
+            }
+            
+            return $data;
+        }
+    }
+
+    public function fetchSerialNumber($serialNumber)
+    {
+        $data = [];
+       
+        $query = "SELECT id FROM equipment WHERE serial_number = '$serialNumber'";
+        
         if ($sql = $this->connect->query($query)) {
 
             if (mysqli_num_rows($sql) != 0) {
@@ -94,7 +156,14 @@ class Model
             }
             
             return $data;
+
+        } else {
+
+            $_SESSION['errorField'][] = 'The entry has not been added, try again';
+            return $data;
+
         }
+
     }
 
     public function validation($data)
@@ -152,6 +221,9 @@ class Model
                     case 'Z':
                         $regularMatch .= '[-_@.{0,0}])';
                         break;
+                    default:
+                        $regularMatch .= ')';
+                        break;
                 }
 
             } else {
@@ -178,7 +250,7 @@ class Model
 
         }
 
-        $regularMatch .= '$';
+        $regularMatch .= '$/';
         
         return $regularMatch;
     }

@@ -14,7 +14,6 @@ include_once  './template/header.php';
 
 $arrTypes = $model->fetchType();
 
-// var_dump($arrTypes);die;
 ?>
 
 <div class="col-md-6 mx-auto">
@@ -49,3 +48,9 @@ $arrTypes = $model->fetchType();
         </div>
     </form>
 </div>
+
+<?php
+
+include_once  './template/footer.php';
+
+?>
