@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Хост: 127.0.0.1:3306
--- Время создания: Ноя 17 2022 г., 15:25
+-- Время создания: Ноя 17 2022 г., 15:49
 -- Версия сервера: 5.7.33-log
 -- Версия PHP: 7.4.27
 
@@ -63,7 +63,8 @@ INSERT INTO `type_equipment` (`id`, `type`, `mask_numb`) VALUES
 --
 ALTER TABLE `equipment`
   ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `serial_number` (`serial_number`);
+  ADD UNIQUE KEY `serial_number` (`serial_number`),
+  ADD KEY `FK_equipment_type_equipment` (`id_equipment`);
 
 --
 -- Индексы таблицы `type_equipment`
@@ -86,6 +87,16 @@ ALTER TABLE `equipment`
 --
 ALTER TABLE `type_equipment`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+
+--
+-- Ограничения внешнего ключа сохраненных таблиц
+--
+
+--
+-- Ограничения внешнего ключа таблицы `equipment`
+--
+ALTER TABLE `equipment`
+  ADD CONSTRAINT `FK_equipment_type_equipment` FOREIGN KEY (`id_equipment`) REFERENCES `type_equipment` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
