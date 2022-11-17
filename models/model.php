@@ -24,7 +24,7 @@ class Model
 
         if (isset($equipmentData['insert'])) {
 
-            $formValidation = $this->validation($equipmentData);
+            $formValidation = Validator::validateForm($equipmentData);
 
             if ($formValidation['valid']) {
 
@@ -164,35 +164,6 @@ class Model
 
         }
 
-    }
-
-    public function validation($data)
-    {
-        $formValid = [];
-        $formValid['valid'] = true;
-        $formValid['validFields'] = [];
-        $formValid['notValidFields'] = [];
-
-        foreach ($data as $key => $value) {
-
-            if ($key == 'insert') continue;
-
-            if (isset($value) && (!empty($value) || $value === '0')) {
-
-                $dataValid = trim($value);
-                $dataValid = stripslashes($value);
-                $dataValid = htmlspecialchars($value);
-
-                $formValid['validFields'][$key] = $dataValid;
-
-            } else {
-
-                $formValid['valid'] = false;
-                $formValid['notValidFields'][] = $key;
-            }
-        }
-
-        return $formValid;
     }
 
     public function generatedMatch($mask)

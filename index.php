@@ -5,6 +5,7 @@ $configApp = include_once './app/config.php';
 session_start();
 
 include_once './models/model.php';
+include_once './components/Validator.php';
 
 $model = new Model($configApp['components']);
 
