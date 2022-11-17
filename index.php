@@ -6,6 +6,7 @@ session_start();
 
 include_once './models/model.php';
 include_once './components/Validator.php';
+include_once './components/GenerateMask.php';
 
 $model = new Model($configApp['components']);
 
