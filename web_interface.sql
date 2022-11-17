@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Хост: 127.0.0.1:3306
--- Время создания: Ноя 15 2022 г., 15:06
+-- Время создания: Ноя 17 2022 г., 15:25
 -- Версия сервера: 5.7.33-log
 -- Версия PHP: 7.4.27
 
@@ -30,7 +30,7 @@ SET time_zone = "+00:00";
 CREATE TABLE `equipment` (
   `id` int(11) NOT NULL,
   `id_equipment` int(11) NOT NULL,
-  `serial_number` text NOT NULL
+  `serial_number` varchar(10) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
@@ -62,7 +62,8 @@ INSERT INTO `type_equipment` (`id`, `type`, `mask_numb`) VALUES
 -- Индексы таблицы `equipment`
 --
 ALTER TABLE `equipment`
-  ADD PRIMARY KEY (`id`);
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `serial_number` (`serial_number`);
 
 --
 -- Индексы таблицы `type_equipment`
@@ -78,7 +79,7 @@ ALTER TABLE `type_equipment`
 -- AUTO_INCREMENT для таблицы `equipment`
 --
 ALTER TABLE `equipment`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT для таблицы `type_equipment`
